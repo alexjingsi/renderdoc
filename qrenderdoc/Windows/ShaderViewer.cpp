@@ -1087,7 +1087,8 @@ bool ShaderViewer::stepBack()
   {
     const ShaderDebugState &oldstate = m_Trace->states[CurrentStep()];
 
-    LineColumnInfo oldLine = m_Trace->lineInfo[oldstate.nextInstruction];
+    LineColumnInfo oldLine =
+        m_Trace->lineInfo[qMax(m_Trace->lineInfo.size() - 1, (size_t)oldstate.nextInstruction)];
 
     while(CurrentStep() < m_Trace->states.count())
     {
