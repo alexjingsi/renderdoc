@@ -2698,6 +2698,22 @@ void WrappedID3D11DeviceContext::PSSetShaderResources(
     m_ContextRecord->AddChunk(scope.Get());
   }
 
+  RDCLOG("PSSetShaderResources ChangeRefRead %u -> %u", StartSlot, StartSlot + NumViews);
+  for(UINT i = 0; i < NumViews; i++)
+  {
+    if(m_CurrentPipelineState->PS.SRVs[StartSlot + i] == ppShaderResourceViews[i])
+      continue;
+
+    UINT ref = 0;
+    if(m_CurrentPipelineState->PS.SRVs[StartSlot + i])
+    {
+      m_CurrentPipelineState->PS.SRVs[StartSlot + i]->AddRef();
+      ref = m_CurrentPipelineState->PS.SRVs[StartSlot + i]->Release();
+    }
+    RDCLOG("   %u: %p (%u) -> %p", i, m_CurrentPipelineState->PS.SRVs[StartSlot + i], ref,
+           ppShaderResourceViews[i]);
+  }
+
   m_CurrentPipelineState->ChangeRefRead(m_CurrentPipelineState->PS.SRVs, ppShaderResourceViews,
                                         StartSlot, NumViews);
 

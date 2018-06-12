@@ -819,8 +819,15 @@ public:
                                    WrappedID3D11Device *device)
       : WrappedView1(real, device, res)
   {
+    RDCLOG("WrappedID3D11ShaderResourceView1() %p / %llu", (ID3D11ShaderResourceView *)this,
+           GetResourceID());
   }
-  virtual ~WrappedID3D11ShaderResourceView1() { Shutdown(); }
+  virtual ~WrappedID3D11ShaderResourceView1()
+  {
+    RDCLOG("~WrappedID3D11ShaderResourceView1() %p / %llu", (ID3D11ShaderResourceView *)this,
+           GetResourceID());
+    Shutdown();
+  }
   //////////////////////////////
   // implement ID3D11ShaderResourceView1
   virtual void STDMETHODCALLTYPE GetDesc1(D3D11_SHADER_RESOURCE_VIEW_DESC1 *pDesc1)
